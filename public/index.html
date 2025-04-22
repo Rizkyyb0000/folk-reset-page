@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Update Password</title>
+  <style>
+    body {
+      background-color: #0c1b17;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background-color: #1a2e2c;
+      padding: 30px 24px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 8px;
+      border: none;
+      width: 100%;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    input {
+      background-color: #0c1b17;
+      color: white;
+      border: 1px solid #444;
+    }
+    button {
+      background-color: #d1ae6e;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #caa759;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Masukkan Password Baru</h2>
+    <input type="password" id="password" placeholder="Password Baru" />
+    <button onclick="submitPassword()">Update Password</button>
+    <div id="message"></div>
+  </div>
 
+  <script>
+    async function submitPassword() {
+      const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('message');
+
+      if (!token || !password) {
+        msg.textContent = "Token atau password tidak valid.";
+        msg.style.color = "red";
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/update-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, password })
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          document.body.innerHTML = `
+            <div style="color: lightgreen; text-align: center; padding: 40px;">
+              <h2>Password berhasil diupdate.</h2>
+              <p>Silakan kembali ke <strong>Folk Football Academy App</strong>.</p>
+            </div>
+          `;
+        } else {
+          msg.textContent = "Gagal: " + (result.message || result.error || "Terjadi kesalahan.");
+          msg.style.color = "red";
+        }
+      } catch (e) {
+        msg.textContent = "Terjadi kesalahan: " + e.message;
+        msg.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
