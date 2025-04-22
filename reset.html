@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,36 +10,46 @@
       color: white;
       font-family: Arial, sans-serif;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      margin-top: 100px;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background-color: #1a2e2c;
+      padding: 30px 24px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
     }
     input, button {
-      padding: 10px;
+      padding: 12px;
       margin-top: 15px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
-      width: 250px;
+      width: 100%;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    input {
+      background-color: #0c1b17;
+      color: white;
+      border: 1px solid #444;
     }
     button {
       background-color: #d1ae6e;
       color: black;
       font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-    .password-wrapper {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
+    button:hover {
+      background-color: #caa759;
     }
     #message {
       margin-top: 20px;
@@ -48,27 +58,14 @@
   </style>
 </head>
 <body>
-  <h2>Masukkan Password Baru</h2>
-  <div class="password-wrapper">
+  <div class="container">
+    <h2>Masukkan Password Baru</h2>
     <input type="password" id="password" placeholder="Password Baru" />
-    <button type="button" class="toggle-password" onclick="togglePassword()">Lihat</button>
+    <button onclick="updatePassword()">Update Password</button>
+    <div id="message"></div>
   </div>
-  <button onclick="updatePassword()">Update Password</button>
-  <div id="message"></div>
 
   <script>
-    function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const toggleBtn = document.querySelector('.toggle-password');
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleBtn.textContent = 'Sembunyikan';
-      } else {
-        passwordInput.type = 'password';
-        toggleBtn.textContent = 'Lihat';
-      }
-    }
-
     async function updatePassword() {
       const urlParams = new URLSearchParams(window.location.hash.substring(1));
       const access_token = urlParams.get('access_token');
@@ -85,7 +82,7 @@
         const res = await fetch('https://sbpbctyscfdfssperdxj.supabase.co/auth/v1/user', {
           method: 'PUT',
           headers: {
-            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNicGJjdHlzY2ZkZnNzcGVyZHhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTQ3MDAsImV4cCI6MjA2MDgzMDcwMH0.XdL0-pPPPBoBKJJOfOiJ5H71sCKCIlkqpDX5rFxuFGg',
+            'apikey': 'YOUR_API_KEY_HERE',
             'Authorization': 'Bearer ' + access_token,
             'Content-Type': 'application/json'
           },
@@ -94,13 +91,14 @@
 
         if (res.ok) {
           document.body.innerHTML = `
-            <h2 style="color: lightgreen; text-align: center;">
-              Berhasil di update, silahkan balik ke <br />Folk Football Academy App
-            </h2>
+            <div style="color: lightgreen; text-align: center; padding: 40px;">
+              <h2>Password berhasil diupdate.</h2>
+              <p>Silakan kembali ke <strong>Folk Football Academy App</strong>.</p>
+            </div>
           `;
         } else {
           const error = await res.json();
-          msg.textContent = "Gagal: " + (error.message || "Error");
+          msg.textContent = "Gagal: " + (error.message || "Terjadi kesalahan.");
           msg.style.color = "red";
         }
       } catch (e) {
