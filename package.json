@@ -1,1 +1,8 @@
-
+{
+  "name": "folk-reset-page",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "next start"
+  },
+  "dependencies": {}
+}
