@@ -17,10 +17,13 @@
         body: JSON.stringify({ token, password })
       });
 
-      // ✅ Cek apakah response ada isi sebelum json()
       let result = {};
-      const text = await res.text();
-      if (text) result = JSON.parse(text);
+      const contentType = res.headers.get("Content-Type") || "";
+      const hasBody = contentType.includes("application/json");
+
+      if (hasBody) {
+        result = await res.json();
+      }
 
       if (res.ok) {
         document.body.innerHTML = `
