@@ -1,30 +1,81 @@
-<!-- reset.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Reset Password</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Update Password</title>
   <style>
     body {
       background-color: #0c1b17;
       color: white;
       font-family: Arial, sans-serif;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin-top: 100px;
     }
-    a {
+    input, button {
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: none;
+      width: 250px;
+    }
+    button {
       background-color: #d1ae6e;
-      padding: 10px 20px;
-      border-radius: 8px;
       color: black;
-      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 20px;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>Reset Password</h1>
-  <p>Tap tombol di bawah untuk lanjut ganti password:</p>
-  <a href="folkapp://reset-callback">Lanjut ke Aplikasi</a>
+  <h2>Masukkan Password Baru</h2>
+  <input type="password" id="password" placeholder="Password Baru" />
+  <button onclick="updatePassword()">Update Password</button>
+  <div id="message"></div>
+
+  <script>
+    async function updatePassword() {
+      const urlParams = new URLSearchParams(window.location.hash.substring(1));
+      const access_token = urlParams.get('access_token');
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('message');
+
+      if (!access_token || !password) {
+        msg.textContent = "Token atau password tidak valid.";
+        msg.style.color = "red";
+        return;
+      }
+
+      try {
+        const res = await fetch('https://sbpbctyscfdfssperdxj.supabase.co/auth/v1/user', {
+          method: 'PUT',
+          headers: {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNicGJjdHlzY2ZkZnNzcGVyZHhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTQ3MDAsImV4cCI6MjA2MDgzMDcwMH0.XdL0-pPPPBoBKJJOfOiJ5H71sCKCIlkqpDX5rFxuFGg',
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ password })
+        });
+
+        if (res.ok) {
+          msg.textContent = "Password berhasil diupdate. Silakan login ulang.";
+          msg.style.color = "lightgreen";
+        } else {
+          const error = await res.json();
+          msg.textContent = "Gagal: " + (error.message || "Error");
+          msg.style.color = "red";
+        }
+      } catch (e) {
+        msg.textContent = "Terjadi kesalahan: " + e.message;
+        msg.style.color = "red";
+      }
+    }
+  </script>
 </body>
 </html>
