@@ -547,24 +547,6 @@
       sendConfirmationToApp();
     }
     
-    function showError(errorMessage) {
-      cardContainer.innerHTML = `
-        <div class="card-header">
-          Terjadi Kesalahan
-        </div>
-        <div class="card-body">
-          <div class="message error" style="display: block;">
-            <i class="fas fa-exclamation-triangle"></i> ${errorMessage}
-          </div>
-          <div class="form-group" style="margin-top: 1.5rem;">
-            <button class="btn" onclick="redirectToApp()">
-              <span class="btn-text">Kembali ke Aplikasi</span>
-              <span class="btn-icon"><i class="fas fa-arrow-left"></i></span>
-            </button>
-          </div>
-        </div>
-      `;
-    }
     
     function validatePasswords() {
       const password = document.getElementById('password').value;
