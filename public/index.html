@@ -395,7 +395,7 @@
 </head>
 <body>
   <div class="main-container">
-   <header>
+    <header>
   <div class="logo-container" style="display: flex; align-items: center;">
     <div class="logo" style="width: 50px; height: 50px; overflow: hidden; border-radius: 8px;">
       <img src="https://i.ibb.co.com/1GNLV6mx/Logo-Folk.png" alt="Folk Football Academy Logo" style="width: 100%; height: 100%; object-fit: contain;">
@@ -547,6 +547,24 @@
       sendConfirmationToApp();
     }
     
+    function showError(errorMessage) {
+      cardContainer.innerHTML = `
+        <div class="card-header">
+          Terjadi Kesalahan
+        </div>
+        <div class="card-body">
+          <div class="message error" style="display: block;">
+            <i class="fas fa-exclamation-triangle"></i> ${errorMessage}
+          </div>
+          <div class="form-group" style="margin-top: 1.5rem;">
+            <button class="btn" onclick="redirectToApp()">
+              <span class="btn-text">Kembali ke Aplikasi</span>
+              <span class="btn-icon"><i class="fas fa-arrow-left"></i></span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
     
     function validatePasswords() {
       const password = document.getElementById('password').value;
